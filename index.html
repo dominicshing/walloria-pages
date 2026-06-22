@@ -10,9 +10,12 @@
     >
     <link rel="icon" href="assets/walloria-icon.png">
     <link rel="apple-touch-icon" href="assets/walloria-icon.png">
+    <link rel="preload" href="assets/walloria-showcase.png" as="image">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+
     <header class="site-header">
       <nav class="nav" aria-label="Primary navigation">
         <a class="brand-link" href="index.html" aria-current="page">
@@ -28,9 +31,17 @@
       </nav>
     </header>
 
-    <main>
+    <main id="content">
       <section class="hero" aria-labelledby="home-title">
-        <div>
+        <img
+          class="hero-media"
+          src="assets/walloria-showcase.png"
+          alt=""
+          width="1672"
+          height="941"
+        >
+        <div class="hero-overlay" aria-hidden="true"></div>
+        <div class="hero-inner">
           <p class="eyebrow">Curated phone wallpapers</p>
           <h1 id="home-title">Walloria - Wallpapers</h1>
           <p class="lead">
@@ -40,19 +51,39 @@
           </p>
           <div class="hero-actions" aria-label="Quick links">
             <a class="button primary" href="support.html">Get Support</a>
-            <a class="button secondary" href="privacy.html">Privacy Policy</a>
+            <a class="button secondary" href="#features">Browse Features</a>
           </div>
-        </div>
-        <div class="app-visual" aria-label="Walloria app icon">
-          <img src="assets/walloria-icon.png" alt="Walloria app icon" width="160" height="160">
         </div>
       </section>
 
-      <section class="section" aria-labelledby="features-title">
-        <h2 id="features-title">What Walloria Offers</h2>
+      <section class="stats-band" aria-label="Walloria at a glance">
+        <div class="stat">
+          <strong>9,000+</strong>
+          <span>wallpapers</span>
+        </div>
+        <div class="stat">
+          <strong>58</strong>
+          <span>collections</span>
+        </div>
+        <div class="stat">
+          <strong>23</strong>
+          <span>filters</span>
+        </div>
+      </section>
+
+      <section class="section" id="features" aria-labelledby="features-title">
+        <div class="section-heading">
+          <p class="eyebrow">Designed for daily refreshes</p>
+          <h2 id="features-title">Explore, tune, save, and share.</h2>
+          <p>
+            Walloria keeps discovery fast while giving each wallpaper enough
+            room to feel premium before it reaches your screen.
+          </p>
+        </div>
         <div class="grid">
           <article class="panel">
-            <h3>Curated collections</h3>
+            <span class="panel-kicker">Collections</span>
+            <h3>Curated by style and season</h3>
             <p>
               Browse wallpapers across nature, beaches, forests, mountains,
               sunsets, waterfalls, auroras, AMOLED, abstract, minimal, space,
@@ -61,6 +92,7 @@
             </p>
           </article>
           <article class="panel">
+            <span class="panel-kicker">Discovery</span>
             <h3>Search and favorites</h3>
             <p>
               Find wallpapers by title or category, then save favorites so the
@@ -68,6 +100,7 @@
             </p>
           </article>
           <article class="panel">
+            <span class="panel-kicker">Customization</span>
             <h3>Filters and downloads</h3>
             <p>
               Preview creative filters, save wallpapers to Photos, share them
@@ -77,8 +110,34 @@
         </div>
       </section>
 
-      <section class="section content" aria-labelledby="details-title">
-        <h2 id="details-title">App Store Information</h2>
+      <section class="section content-section" aria-labelledby="collections-title">
+        <div class="section-heading compact">
+          <p class="eyebrow">Collection highlights</p>
+          <h2 id="collections-title">A catalog built for every mood.</h2>
+        </div>
+        <div class="chip-cloud" aria-label="Wallpaper collection examples">
+          <span>AMOLED</span>
+          <span>Nature</span>
+          <span>Abstract</span>
+          <span>Space</span>
+          <span>City</span>
+          <span>Anime</span>
+          <span>Fantasy</span>
+          <span>Technology</span>
+          <span>Cars</span>
+          <span>Animals</span>
+          <span>Christmas</span>
+          <span>Lunar New Year</span>
+          <span>Halloween</span>
+          <span>Valentine's Day</span>
+        </div>
+      </section>
+
+      <section class="section feature-band" aria-labelledby="details-title">
+        <div>
+          <p class="eyebrow">App Store information</p>
+          <h2 id="details-title">Built around the wallpaper workflow.</h2>
+        </div>
         <ul class="feature-list">
           <li>9,000+ high-quality phone wallpapers</li>
           <li>AMOLED, nature, abstract, space, city, anime, seasonal, and more</li>
@@ -87,6 +146,18 @@
           <li>Optional festival reminders for seasonal collections</li>
           <li>Premium filter options</li>
         </ul>
+      </section>
+
+      <section class="section support-band" aria-labelledby="support-cta-title">
+        <div>
+          <p class="eyebrow">Need help?</p>
+          <h2 id="support-cta-title">Reach Walloria support.</h2>
+          <p>
+            Get help with downloads, Premium, reminders, app issues, or
+            feedback.
+          </p>
+        </div>
+        <a class="button primary" href="support.html">Get Support</a>
       </section>
     </main>
 
