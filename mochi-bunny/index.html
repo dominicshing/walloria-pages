@@ -4,24 +4,50 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7efef">
-<title>Mochi Bunny — Three.js v5</title>
+<title>Mochi Bunny — Three.js v5.1</title>
 <style>
 :root{--ink:#2a2527;--muted:#7f7377;--pink:#e7a3ad;--line:rgba(62,43,50,.09)}*{box-sizing:border-box}html,body{margin:0;height:100%;background:#f5efee;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}body{overflow:hidden}.app{height:100%;display:grid;grid-template-rows:auto 1fr;padding:14px;gap:10px;background:radial-gradient(circle at 8% 10%,#f7dfe2 0,transparent 27%),radial-gradient(circle at 93% 8%,#fffaf2 0,transparent 30%),linear-gradient(135deg,#f4efed,#fbf8f5 55%,#f6ecee)}header{display:flex;justify-content:space-between;align-items:center;padding:8px 12px}.brand{font-weight:760;display:flex;align-items:center;gap:10px}.mark{width:36px;height:36px;border-radius:13px;background:#fff9;display:grid;place-items:center;border:1px solid #fff}.mark:before{content:"✿";color:var(--pink);font-size:19px}.pill{font-size:12px;color:#9b7279;background:#fff7;border:1px solid #fff;border-radius:999px;padding:8px 11px}main{min-height:0;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.72fr);gap:12px}.card{min-height:0;border-radius:26px;background:#ffffffa8;border:1px solid #ffffffc9;box-shadow:0 26px 70px rgba(93,71,77,.13);overflow:hidden;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}.viewer{position:relative;background:radial-gradient(circle at 50% 36%,#fff8f5 0,#f5e7e7 62%,#ecdada 100%)}.viewer canvas{width:100%;height:100%;display:block;touch-action:none}.hint,.topnote,.loading{position:absolute;background:#ffffffc4;border:1px solid #fff;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}.hint{left:50%;bottom:14px;transform:translateX(-50%);border-radius:999px;padding:9px 13px;color:#74686c;font-size:12px;white-space:nowrap;pointer-events:none}.topnote{left:16px;top:15px;border-radius:15px;padding:10px 12px;pointer-events:none}.topnote b{font-size:13px;display:block}.topnote span{font-size:11px;color:var(--muted)}.loading{inset:0;display:grid;place-items:center;text-align:center;color:#806f74;z-index:3}.loading.hide{display:none}.info{padding:27px;display:flex;flex-direction:column;overflow:auto}.eye{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#ba7a85;margin-bottom:12px}h1{font:500 clamp(42px,4.5vw,72px)/.91 Georgia,serif;letter-spacing:-.055em;margin:0}.sub{font:18px Georgia,serif;color:#7d7074;margin-top:12px}.desc{color:#6f676a;font-size:14px;line-height:1.6;margin:22px 0}.traits{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.trait{background:#fff9;border:1px solid var(--line);border-radius:15px;padding:11px}.trait b{display:block;font-size:11px}.trait span{font-size:10px;color:#988d90}.controls{display:grid;gap:9px;margin-top:18px}button{border:0;border-radius:15px;padding:14px;font-weight:650;font-size:14px;cursor:pointer}.primary{color:#fff;background:linear-gradient(#ebb0b7,#df969f);box-shadow:0 10px 24px rgba(198,125,136,.22)}.secondary{color:#403a3c;background:#fff9;border:1px solid var(--line)}.status{margin-top:auto;padding-top:22px;color:#918588;font-size:11px;display:flex;justify-content:space-between;gap:10px}.ok:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#79b891;margin-right:7px;box-shadow:0 0 0 5px #79b8911c}@media(max-width:840px){body{overflow:auto}.app{height:auto;min-height:100%;padding:9px}main{grid-template-columns:1fr;grid-template-rows:60vh auto}.viewer{min-height:520px}.info{padding:22px}.pill{display:none}}@media(max-width:520px){main{grid-template-rows:58vh auto}.viewer{min-height:0}.traits{grid-template-columns:1fr}h1{font-size:48px}.hint{font-size:11px;bottom:10px}}
+button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}.loading{padding:28px;line-height:1.7}
 </style>
-<script>window.__threeReady=false;setTimeout(()=>{if(!window.__threeReady){const el=document.getElementById('loading');if(el)el.innerHTML='Three.js CDN 載入較慢。<br>請確認網絡後重新整理。'}},8000)</script>
+<script>
+window.__threeReady=false;
+window.__viewerFailed=false;
+window.__viewerStage='cdn';
+window.__viewerFailure=function(message,status){
+  window.__viewerFailed=true;
+  const loading=document.getElementById('loading');
+  if(loading){loading.textContent=message;loading.classList.remove('hide');loading.setAttribute('role','alert');}
+  const state=document.getElementById('status');
+  if(state){state.textContent=status;state.classList.remove('ok');}
+  document.querySelectorAll('.controls button').forEach(button=>button.disabled=true);
+};
+setTimeout(()=>{
+  if(!window.__threeReady&&!window.__viewerFailed){
+    const el=document.getElementById('loading');
+    if(el)el.textContent=window.__viewerStage==='cdn'
+      ?'Three.js CDN 載入較慢，請稍候或重新整理。'
+      :'正在準備 3D 畫面，請稍候。';
+  }
+},8000);
+</script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
 </head>
 <body>
-<div class="app"><header><div class="brand"><span class="mark"></span>Mochi Bunny</div><div class="pill">Three.js · CDN · v5</div></header><main>
-<section class="card viewer" id="viewer"><canvas id="gl"></canvas><div class="topnote"><b>Live 3D Viewer</b><span>v5 · Plush refinement</span></div><div class="hint">↺ 拖動旋轉 · 雙指縮放 ↻</div><div class="loading" id="loading">正在從 CDN 載入 Three.js…</div></section>
-<aside class="card info"><div class="eye">Original virtual collectible</div><h1>Mochi<br>Bunny</h1><div class="sub">Sakura Dreams · Figure No. 01</div><p class="desc">v5 重做臉部立體結構與毛絨材質：加入柔軟 muzzle、較內嵌的玻璃眼、貼身胸花、自然連接的四肢，以及自動相機 framing。</p><div class="traits"><div class="trait"><b>Plush</b><span>Sheen + fabric bump</span></div><div class="trait"><b>Face</b><span>Soft muzzle</span></div><div class="trait"><b>Camera</b><span>Auto fit</span></div></div><div class="controls"><button class="primary" id="bounce">✦ Play Bounce</button><button class="secondary" id="spin">↻ Auto Rotate</button><button class="secondary" id="reset">⟲ Reset View</button></div><div class="status"><span class="ok" id="status">Loading CDN…</span><span>v5</span></div></aside>
+<div class="app"><header><div class="brand"><span class="mark"></span>Mochi Bunny</div><div class="pill">Three.js · CDN · v5.1</div></header><main>
+<section class="card viewer" id="viewer"><canvas id="gl"></canvas><div class="topnote"><b>Live 3D Viewer</b><span>v5.1 · Plush refinement</span></div><div class="hint">↺ 拖動旋轉 · 雙指縮放 ↻</div><div class="loading" id="loading">正在從 CDN 載入 Three.js…</div></section>
+<aside class="card info"><div class="eye">Original virtual collectible</div><h1>Mochi<br>Bunny</h1><div class="sub">Sakura Dreams · Figure No. 01</div><p class="desc">v5.1 重做臉部立體結構與毛絨材質：加入柔軟 muzzle、較內嵌的玻璃眼、貼身胸花、自然連接的四肢，以及自動相機 framing。</p><div class="traits"><div class="trait"><b>Plush</b><span>Sheen + fabric bump</span></div><div class="trait"><b>Face</b><span>Soft muzzle</span></div><div class="trait"><b>Camera</b><span>Auto fit</span></div></div><div class="controls"><button class="primary" id="bounce" disabled>✦ Play Bounce</button><button class="secondary" id="spin" disabled>↻ Auto Rotate</button><button class="secondary" id="reset" disabled>⟲ Reset View</button></div><div class="status"><span class="ok" id="status">Loading CDN…</span><span>v5.1</span></div></aside>
 </main></div>
 <script type="module">
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+try {
+const [THREE,{OrbitControls},{RoomEnvironment}]=await Promise.all([
+  import('three'),
+  import('three/addons/controls/OrbitControls.js'),
+  import('three/addons/environments/RoomEnvironment.js')
+]);
+window.__viewerStage='webgl';
 const canvas=document.querySelector('#gl'),viewer=document.querySelector('#viewer');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,premultipliedAlpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.02;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.setClearColor(0x000000,0);
+window.__viewerStage='scene';
 const scene=new THREE.Scene();const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(new RoomEnvironment(),.04).texture;pmrem.dispose();
 const camera=new THREE.PerspectiveCamera(36,1,.1,100);const controls=new OrbitControls(camera,canvas);controls.enableDamping=true;controls.dampingFactor=.065;controls.enablePan=false;controls.minDistance=4.8;controls.maxDistance=9.5;controls.minPolarAngle=.75;controls.maxPolarAngle=2.12;
 scene.add(new THREE.HemisphereLight(0xfffbf7,0xa58f91,1.35));const key=new THREE.DirectionalLight(0xfffbf8,2.15);key.position.set(3.6,5.8,4.5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-4;key.shadow.camera.right=4;key.shadow.camera.top=6;key.shadow.camera.bottom=-1;scene.add(key);const fill=new THREE.DirectionalLight(0xffdfe4,.85);fill.position.set(-4,3,3);scene.add(fill);const rim=new THREE.DirectionalLight(0xffeedf,.65);rim.position.set(1.5,4,-4);scene.add(rim);
@@ -34,6 +60,16 @@ const flower=new THREE.Group();flower.position.set(0,1.42,.602);flower.rotation.
 const ground=new THREE.Mesh(new THREE.PlaneGeometry(20,20),new THREE.ShadowMaterial({color:0x765b61,opacity:.16}));ground.rotation.x=-Math.PI/2;ground.position.y=.22;ground.receiveShadow=true;scene.add(ground);
 function frameBunny(){const box=new THREE.Box3().setFromObject(bunny),center=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3()),radius=Math.max(size.x,size.y,size.z)*.56;controls.target.copy(center);controls.target.y-=.02;const vfov=THREE.MathUtils.degToRad(camera.fov),distance=(radius/Math.sin(vfov/2))*1.12;camera.position.set(center.x,center.y+.05,center.z+distance);controls.minDistance=distance*.70;controls.maxDistance=distance*1.55;controls.update()}
 let bounceStart=-1;function resize(){const r=viewer.getBoundingClientRect(),w=Math.max(1,r.width),h=Math.max(1,r.height);renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w<600?39:36;camera.updateProjectionMatrix()}new ResizeObserver(()=>resize()).observe(viewer);resize();frameBunny();
-const spin=document.querySelector('#spin');spin.onclick=()=>{controls.autoRotate=!controls.autoRotate;controls.autoRotateSpeed=1.55;spin.textContent=controls.autoRotate?'Ⅱ Stop Rotate':'↻ Auto Rotate'};document.querySelector('#reset').onclick=()=>{controls.autoRotate=false;spin.textContent='↻ Auto Rotate';bunny.rotation.set(0,-.26,0);frameBunny()};document.querySelector('#bounce').onclick=()=>bounceStart=performance.now()/1000;controls.addEventListener('start',()=>{controls.autoRotate=false;spin.textContent='↻ Auto Rotate'});function animate(){const t=performance.now()/1000;if(bounceStart>0){const d=t-bounceStart;if(d<1.25){const env=1-d/1.25;bunny.position.y=Math.abs(Math.sin(d*9.4))*.30*env;bunny.rotation.z=Math.sin(d*8.2)*.055*env}else{bunny.position.y=0;bunny.rotation.z=0;bounceStart=-1}}controls.update();renderer.render(scene,camera)}renderer.setAnimationLoop(animate);window.__threeReady=true;document.querySelector('#loading').classList.add('hide');document.querySelector('#status').textContent='Three.js v5 ready';
+const spin=document.querySelector('#spin');spin.onclick=()=>{controls.autoRotate=!controls.autoRotate;controls.autoRotateSpeed=1.55;spin.textContent=controls.autoRotate?'Ⅱ Stop Rotate':'↻ Auto Rotate'};document.querySelector('#reset').onclick=()=>{controls.autoRotate=false;spin.textContent='↻ Auto Rotate';bunny.rotation.set(0,-.26,0);frameBunny()};document.querySelector('#bounce').onclick=()=>bounceStart=performance.now()/1000;controls.addEventListener('start',()=>{controls.autoRotate=false;spin.textContent='↻ Auto Rotate'});function animate(){const t=performance.now()/1000;if(bounceStart>0){const d=t-bounceStart;if(d<1.25){const env=1-d/1.25;bunny.position.y=Math.abs(Math.sin(d*9.4))*.30*env;bunny.rotation.z=Math.sin(d*8.2)*.055*env}else{bunny.position.y=0;bunny.rotation.z=0;bounceStart=-1}}controls.update();renderer.render(scene,camera)}renderer.setAnimationLoop(animate);window.__threeReady=true;document.querySelector('#loading').classList.add('hide');document.querySelector('#status').textContent='Three.js v5.1 ready';
+document.querySelectorAll('.controls button').forEach(button=>button.disabled=false);
+} catch(error) {
+  console.error('Mochi Bunny initialization failed:',error);
+  const stage=window.__viewerStage;
+  window.__viewerFailure(stage==='webgl'
+    ?'此瀏覽器無法啟用 WebGL 2，暫時不能顯示 3D 公仔。請在支援 WebGL 2 的瀏覽器開啟。'
+    :stage==='cdn'?'Three.js CDN 載入失敗，請檢查網絡後重新整理。'
+    :'3D 畫面初始化失敗，請重新整理再試。',
+    stage==='webgl'?'WebGL unavailable':stage==='cdn'?'CDN unavailable':'Viewer unavailable');
+}
 </script>
 </body></html>
